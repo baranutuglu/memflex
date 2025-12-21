@@ -119,6 +119,66 @@ void run_test(alloc_algo_t algo, const char *name)
     print_heap_stats(NULL);
     print_block_count();
     print_total_size();
+
+    printf("Step 5: Realloc Test...\n");
+    // 1. Grow a block
+    for (int i = 0; i < NUM_INITIAL_ALLOCS; i++)
+    {
+        if (ptrs[i] != NULL)
+        {
+            size_t new_size = 600; // Force growth
+            printf("Reallocating slot [%d] to %zu bytes (Grow)\n", i, new_size);
+            void *old_ptr = ptrs[i];
+            ptrs[i] = my_realloc(ptrs[i], new_size);
+
+            char op[64];
+            sprintf(op, "REALLOC %zu", new_size);
+            dump_heap_state("heap_history.jsonl", step++, op, ptrs[i], name);
+
+            if (ptrs[i] != old_ptr)
+            {
+                printf("Block moved from %p to %p\n", old_ptr, ptrs[i]);
+            }
+            else
+            {
+                printf("Block resized in place at %p\n", ptrs[i]);
+            }
+            break; // Just test one
+        }
+    }
+
+    // 2. Shrink a block
+    for (int i = 0; i < NUM_INITIAL_ALLOCS; i++)
+    {
+        if (ptrs[i] != NULL)
+        {
+            // Find a block that is reasonably large to shrink
+            // For simplicity, just pick the next available one
+            size_t new_size = 32;
+            printf("Reallocating slot [%d] to %zu bytes (Shrink)\n", i, new_size);
+            void *old_ptr = ptrs[i];
+            ptrs[i] = my_realloc(ptrs[i], new_size);
+
+            char op[64];
+            sprintf(op, "REALLOC %zu", new_size);
+            dump_heap_state("heap_history.jsonl", step++, op, ptrs[i], name);
+
+            if (ptrs[i] != old_ptr)
+            {
+                printf("Block moved from %p to %p (Unexpected for shrink)\n", old_ptr, ptrs[i]);
+            }
+            else
+            {
+                printf("Block resized in place at %p\n", ptrs[i]);
+            }
+            break;
+        }
+    }
+
+    print_heap_stats(NULL);
+    print_block_count();
+    print_total_size();
+
     printf("Visual Test %s Completed.\n\n", name);
 }
 

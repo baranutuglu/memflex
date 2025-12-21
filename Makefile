@@ -16,3 +16,8 @@ run-main: main
 	LD_LIBRARY_PATH=. ./main
 	@echo "--- Checking Dependencies ---"
 	LD_LIBRARY_PATH=. ldd main
+
+test: lib
+	gcc -I src tests/test_suite.c -L. -lmymemory -o tests/run_tests
+	@echo "--- Running Unit Tests ---"
+	LD_LIBRARY_PATH=. tests/run_tests

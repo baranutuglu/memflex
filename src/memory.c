@@ -226,6 +226,55 @@ void *my_calloc(size_t num, size_t size, alloc_algo_t algo)
     return ptr;
 }
 
+void *my_realloc(void *ptr, size_t size)
+{
+    if (ptr == NULL)
+    {
+        return my_malloc(size, ALGO_FIRST_FIT);
+    }
+
+    if (size == 0)
+    {
+        my_free(ptr);
+        return NULL;
+    }
+
+    block_header_t *block = (block_header_t *)((char *)ptr - BLOCK_HEADER_SIZE);
+    size_t old_size = block->size;
+
+    // Case 1: Shrinking or same size
+    if (old_size >= size)
+    {
+        split_block(block, size);
+        return ptr;
+    }
+
+    // Case 2: Growing
+    // 2a. Try to merge with next block if it is free and has enough space
+    if (block->next && block->next->is_free && (old_size + BLOCK_HEADER_SIZE + block->next->size >= size))
+    {
+        block->size += BLOCK_HEADER_SIZE + block->next->size;
+        block->next = block->next->next;
+        if (block->next)
+        {
+            block->next->prev = block;
+        }
+
+        // Split if the merged block is too big
+        split_block(block, size);
+        return ptr;
+    }
+
+    // 2b. Allocate new block, copy data, free old block
+    void *new_ptr = my_malloc(size, ALGO_FIRST_FIT);
+    if (new_ptr)
+    {
+        memcpy(new_ptr, ptr, old_size);
+        my_free(ptr);
+    }
+    return new_ptr;
+}
+
 void print_heap_stats(void *highlight_ptr)
 {
     printf("--- Heap Stats ---\n");

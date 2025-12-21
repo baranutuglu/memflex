@@ -33,6 +33,7 @@ void my_memory_reset(void);
 void *my_malloc(size_t size, alloc_algo_t algo);
 void my_free(void *ptr);
 void *my_calloc(size_t num, size_t size, alloc_algo_t algo);
+void *my_realloc(void *ptr, size_t size);
 
 /* Debugging/Info */
 void print_heap_stats(void *highlight_ptr);
