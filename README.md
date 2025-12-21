@@ -18,36 +18,68 @@ The project demonstrates fundamental operating system concepts such as memory al
 
 ```
 DDM/
-├── Makefile            # Build script for the kernel module
+├── Makefile            # Build script for kernel module and tests
 ├── src/
-│   ├── kernel.c        # Entry point, tests, and demo logic
-│   ├── memory.c        # Implementation of the memory manager
-│   └── memory.h        # Header file with function prototypes and structs
+│   ├── kernel.c        # Kernel module entry point
+│   ├── memory.c        # Memory manager implementation
+│   └── memory.h        # Header file
+├── tests/
+│   ├── test_memory.c      # Unit tests
+│   └── benchmark_memory.c # Performance benchmark
+├── viz/                # Rust-based visualization tool
 └── README.md           # This file
 ```
 
 ## Prerequisites
 
-- Linux Operating System (Arch Linux, Ubuntu, etc.)
-- GCC Compiler
-- Make tool
-- Linux Kernel Headers (usually installed via `linux-headers` package)
+- Linux Operating System
+- GCC Compiler & Make
+- Linux Kernel Headers
+- **Rust & Cargo** (for visualization only)
 
 ## How to Build and Run
 
 1.  **Open a terminal** in the project directory.
 
-2.  **Clean previous builds (Optional):**
+2.  **Clean previous builds:**
 
     ```bash
     make clean
     ```
 
-3.  **Compile and Run:**
-    This command compiles the module, inserts it into the kernel, displays the output log, and then removes the module.
+3.  **Compile and Run Kernel Module:**
+    This compiles the module, inserts it, shows logs, and removes it.
 
     ```bash
     make run
+    ```
+
+## Testing & Benchmarking
+
+### Unit Tests
+
+To verify the correctness of the algorithms (First-Fit, Best-Fit, Coalescing):
+
+```bash
+make test
+```
+
+### Performance Benchmark
+
+To compare the performance of different algorithms:
+
+```bash
+make benchmark
+```
+
+### Visualization
+
+To run the benchmark and visualize the results with graphs (requires Rust):
+
+```bash
+make visualize
+```
+
     ```
 
     _Note: You may be asked for your `sudo` password because inserting kernel modules requires root privileges._

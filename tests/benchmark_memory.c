@@ -26,6 +26,16 @@ typedef struct
 
 alloc_record_t allocations[NUM_OPS];
 
+typedef struct
+{
+    char name[20];
+    double time;
+    int free_blocks;
+} benchmark_result_t;
+
+benchmark_result_t results[3];
+int result_idx = 0;
+
 void run_benchmark(alloc_algo_t algo, const char *algo_name)
 {
     // Reset heap
@@ -89,7 +99,33 @@ void run_benchmark(alloc_algo_t algo, const char *algo_name)
 
     printf("%-15s | Süre: %f sn | Kalan Free Blok Sayısı: %d\n", algo_name, time_spent, free_blocks);
 
+    // Save results
+    if (result_idx < 3)
+    {
+        strncpy(results[result_idx].name, algo_name, 19);
+        results[result_idx].time = time_spent;
+        results[result_idx].free_blocks = free_blocks;
+        result_idx++;
+    }
+
     free(heap_mem);
+}
+
+void save_results_to_json()
+{
+    FILE *f = fopen("results.json", "w");
+    if (!f)
+        return;
+    fprintf(f, "[\n");
+    for (int i = 0; i < result_idx; i++)
+    {
+        fprintf(f, "  {\"name\": \"%s\", \"time\": %f, \"free_blocks\": %d}%s\n",
+                results[i].name, results[i].time, results[i].free_blocks,
+                (i < result_idx - 1) ? "," : "");
+    }
+    fprintf(f, "]\n");
+    fclose(f);
+    printf("Sonuçlar results.json dosyasına kaydedildi.\n");
 }
 
 int main()
@@ -102,6 +138,8 @@ int main()
     run_benchmark(ALGO_FIRST_FIT, "First Fit");
     run_benchmark(ALGO_BEST_FIT, "Best Fit");
     run_benchmark(ALGO_WORST_FIT, "Worst Fit");
+
+    save_results_to_json();
 
     return 0;
 }

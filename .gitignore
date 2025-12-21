@@ -1,0 +1,20 @@
+# C Kernel Module artifacts
+*.o
+*.ko
+*.mod.c
+*.mod
+modules.order
+Module.symvers
+.*.cmd
+.tmp_versions/
+
+# Test Executables
+tests/test_memory
+tests/benchmark_memory
+
+# Benchmark Data
+results.json
+
+# Rust / Cargo
+viz/target/
+viz/Cargo.lock

@@ -1,0 +1,5 @@
+[
+  {"name": "First Fit", "time": 0.015919, "free_blocks": 469},
+  {"name": "Best Fit", "time": 0.031427, "free_blocks": 223},
+  {"name": "Worst Fit", "time": 0.041473, "free_blocks": 776}
+]
