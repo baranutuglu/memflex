@@ -16,3 +16,7 @@ run: all
 test:
 	gcc -I tests/mocks -I src tests/test_memory.c -o tests/test_memory
 	./tests/test_memory
+
+benchmark:
+	gcc -I tests/mocks -I src tests/benchmark_memory.c -o tests/benchmark_memory
+	./tests/benchmark_memory
