@@ -2,16 +2,10 @@ use crate::data::{BenchmarkResult, HeapStep};
 use std::fs::{self, File};
 use std::io::{BufRead, BufReader};
 
-pub enum CurrentTab {
-    Visualizer,
-    Statistics,
-}
-
 pub struct App {
     pub steps: Vec<HeapStep>,
     pub current_step_index: usize,
     pub benchmark_results: Vec<BenchmarkResult>,
-    pub current_tab: CurrentTab,
 }
 
 impl App {
@@ -31,7 +25,6 @@ impl App {
             steps,
             current_step_index: 0,
             benchmark_results,
-            current_tab: CurrentTab::Visualizer,
         }
     }
 
@@ -49,12 +42,5 @@ impl App {
 
     pub fn current_step(&self) -> &HeapStep {
         &self.steps[self.current_step_index]
-    }
-
-    pub fn toggle_tab(&mut self) {
-        self.current_tab = match self.current_tab {
-            CurrentTab::Visualizer => CurrentTab::Statistics,
-            CurrentTab::Statistics => CurrentTab::Visualizer,
-        };
     }
 }

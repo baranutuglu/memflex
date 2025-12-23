@@ -31,7 +31,6 @@ fn main() -> Result<(), Box<dyn Error>> {
                         KeyCode::Char('q') | KeyCode::Esc => break,
                         KeyCode::Right | KeyCode::Char('n') => app.next_step(),
                         KeyCode::Left | KeyCode::Char('p') => app.prev_step(),
-                        KeyCode::Tab => app.toggle_tab(),
                         _ => {}
                     }
                 }
